@@ -12,6 +12,26 @@ from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
 
 mushrooms = pd.read_csv("./dataset/mushrooms.csv")
 
+# pd.set_option("display.max_column", mushrooms.shape[1])
+
+# print(mushrooms.head())
+
+# print(mushrooms.describe())
+
+# sns.heatmap(mushrooms.isna())
+
+# print(mushrooms.isna().sum())
+
+# print(np.sum(mushrooms["stalk-root"] == "?", axis=0))
+
+# print(mushrooms.shape)
+
+# mushrooms = mushrooms[mushrooms["stalk-root"] != "?"]
+
+# mushrooms = mushrooms.drop("stalk-root", axis=1)
+
+# print(mushrooms.shape)
+
 def impute(data):
     return data.drop(["stalk-root", "veil-type"], axis=1)
 
@@ -44,7 +64,7 @@ y_encoded = y_encoder.fit_transform(y)
 
 X_train, X_test, y_train, y_test = train_test_split(X_encoded, y_encoded, test_size=0.2, random_state=0)
 
-
+"""
 model_list = {
     "LinearSVC": LinearSVC(random_state=0),
     "SVC": SVC(random_state=0),
@@ -56,11 +76,10 @@ model_list = {
 for name, model in model_list.items():
     print(name)
     evaluate(model, X_train, y_train.ravel(), X_test, y_test)
-
 """
+
 model = KNeighborsClassifier()
 model.fit(X_train, y_train.ravel())
-"""
 
 # print(model.score(X_test, y_test))
 
