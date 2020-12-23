@@ -80,6 +80,12 @@ model.fit(X_train, y_train.ravel())
 
 # print(model.score(X_test, y_test))
 
+pd.to_pickle(X_encoder, "mushrooms_feature_encoder.pickle")
+pd.to_pickle(model, "mushrooms_ml_model.pickle")
+
+
+
+
 
 
 
