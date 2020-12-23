@@ -1,7 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
-import seaborn as sns
 from sklearn.model_selection import learning_curve
 from sklearn.metrics import confusion_matrix, classification_report
 from sklearn.model_selection import train_test_split
