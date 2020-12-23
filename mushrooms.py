@@ -30,8 +30,6 @@ mushrooms = pd.read_csv("./dataset/mushrooms.csv")
 
 # mushrooms = mushrooms.drop("stalk-root", axis=1)
 
-# print(mushrooms.shape)
-
 def impute(data):
     return data.drop(["stalk-root", "veil-type"], axis=1)
 
