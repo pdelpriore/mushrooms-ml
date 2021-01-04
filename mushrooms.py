@@ -64,7 +64,7 @@ def optimize_model(X, y):
     
     best_model = grid.best_estimator_
     
-    print(grid.best_params_)
+    # print(grid.best_params_)
     
     return best_model
     
@@ -91,12 +91,14 @@ X_selected = X[selected_features]
 X_ohe_encoder = OneHotEncoder()
 
 X_ohe_encoder.fit(X_selected)
-
 X_selected_encoded = X_ohe_encoder.transform(X_selected)
 
 X_train, X_test, y_train, y_test = train_test_split(X_selected_encoded, y_encoded, test_size=0.2, random_state=0)
 
-# best_model = optimize_model(X_train, y_train.ravel())
+best_model = optimize_model(X_train, y_train.ravel())
+best_model.fit(X_train, y_train.ravel())
+
+# print(best_model.score(X_test, y_test))
 
 # evaluate(best_model, X_train, y_train.ravel(), X_test, y_test)
 
@@ -114,10 +116,6 @@ for name, model in model_list.items():
     evaluate(model, X_train, y_train.ravel(), X_test, y_test)
 """
 
-
-model = KNeighborsClassifier()
-model.fit(X_train, y_train.ravel())
-
 """
 params = ["f", "f", "c", "b", "k", "f", "f", "n", "e", "k", "a", "g"]
 
@@ -125,10 +123,8 @@ X_np_array = np.array(params).reshape(1, 12)
 
 X_np_encoded = X_ohe_encoder.transform(X_np_array)
 
-print(model.predict(X_np_encoded))
+print(best_model.predict(X_np_encoded))
 """
-
-# print(model.score(X_test, y_test))
 
 # pd.to_pickle(X_ohe_encoder, "mushrooms_feature_encoder.pickle")
 # pd.to_pickle(model, "mushrooms_ml_model.pickle")
