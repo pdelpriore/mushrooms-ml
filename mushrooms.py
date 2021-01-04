@@ -127,7 +127,7 @@ print(best_model.predict(X_np_encoded))
 """
 
 # pd.to_pickle(X_ohe_encoder, "mushrooms_feature_encoder.pickle")
-# pd.to_pickle(model, "mushrooms_ml_model.pickle")
+# pd.to_pickle(best_model, "mushrooms_ml_model.pickle")
 
 
 
