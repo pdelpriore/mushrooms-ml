@@ -5,7 +5,7 @@ from sklearn.feature_selection import SelectKBest, chi2
 from sklearn.model_selection import learning_curve, GridSearchCV
 from sklearn.metrics import confusion_matrix, classification_report
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import LabelBinarizer, OrdinalEncoder
+from sklearn.preprocessing import LabelBinarizer, OrdinalEncoder, OneHotEncoder
 from sklearn.svm import LinearSVC, SVC
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
@@ -88,9 +88,11 @@ selected_features = select_features(feature_names, X_encoded, y_encoded)
 
 X_selected = X[selected_features]
 
-X_encoder.fit(X_selected)
+X_ohe_encoder = OneHotEncoder()
 
-X_selected_encoded = X_encoder.transform(X_selected)
+X_ohe_encoder.fit(X_selected)
+
+X_selected_encoded = X_ohe_encoder.transform(X_selected)
 
 X_train, X_test, y_train, y_test = train_test_split(X_selected_encoded, y_encoded, test_size=0.2, random_state=0)
 
@@ -116,9 +118,19 @@ for name, model in model_list.items():
 model = KNeighborsClassifier()
 model.fit(X_train, y_train.ravel())
 
-print(model.score(X_test, y_test))
+"""
+params = ["f", "f", "c", "b", "k", "f", "f", "n", "e", "k", "a", "g"]
 
-# pd.to_pickle(X_encoder, "mushrooms_feature_encoder.pickle")
+X_np_array = np.array(params).reshape(1, 12)
+
+X_np_encoded = X_ohe_encoder.transform(X_np_array)
+
+print(model.predict(X_np_encoded))
+"""
+
+# print(model.score(X_test, y_test))
+
+# pd.to_pickle(X_ohe_encoder, "mushrooms_feature_encoder.pickle")
 # pd.to_pickle(model, "mushrooms_ml_model.pickle")
 
 
