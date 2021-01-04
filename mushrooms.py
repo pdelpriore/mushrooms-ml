@@ -47,16 +47,13 @@ def evaluate(model, X_train, y_train, X_test, y_test):
     plt.plot(N, val_score.mean(axis=1), label="validation score")
     plt.legend()
     
-def select_features(feature_names, X_train, y_train, X_test):
+def select_features(feature_names, X, y):
     selector = SelectKBest(chi2, k=12)
-    selector.fit(X_train, y_train)
+    selector.fit_transform(X, y)
     
-    X_train_selected = selector.transform(X_train)
-    X_test_selected = selector.transform(X_test)
-    
-    print(feature_names[selector.get_support()])
+    selected_features = feature_names[selector.get_support()]       
         
-    return X_train_selected, X_test_selected
+    return selected_features
 
 def optimize_model(X, y):
     model = KNeighborsClassifier()
@@ -87,13 +84,19 @@ X_encoded = X_encoder.transform(X)
 
 y_encoded = y_encoder.fit_transform(y)
 
-X_train, X_test, y_train, y_test = train_test_split(X_encoded, y_encoded, test_size=0.2, random_state=0)
+selected_features = select_features(feature_names, X_encoded, y_encoded)
 
-X_train_selected, X_test_selected = select_features(feature_names, X_train, y_train, X_test)
+X_selected = X[selected_features]
 
-# best_model = optimize_model(X_train_selected, y_train.ravel())
+X_encoder.fit(X_selected)
 
-# evaluate(best_model, X_train_selected, y_train.ravel(), X_test_selected, y_test)
+X_selected_encoded = X_encoder.transform(X_selected)
+
+X_train, X_test, y_train, y_test = train_test_split(X_selected_encoded, y_encoded, test_size=0.2, random_state=0)
+
+# best_model = optimize_model(X_train, y_train.ravel())
+
+# evaluate(best_model, X_train, y_train.ravel(), X_test, y_test)
 
 """
 model_list = {
@@ -106,16 +109,18 @@ model_list = {
 
 for name, model in model_list.items():
     print(name)
-    evaluate(model, X_train_selected, y_train.ravel(), X_test_selected, y_test)
+    evaluate(model, X_train, y_train.ravel(), X_test, y_test)
 """
 
-model = KNeighborsClassifier()
-model.fit(X_train_selected, y_train.ravel())
 
-print(model.score(X_test_selected, y_test))
+model = KNeighborsClassifier()
+model.fit(X_train, y_train.ravel())
+
+print(model.score(X_test, y_test))
 
 # pd.to_pickle(X_encoder, "mushrooms_feature_encoder.pickle")
 # pd.to_pickle(model, "mushrooms_ml_model.pickle")
+
 
 
 
