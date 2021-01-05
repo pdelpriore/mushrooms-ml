@@ -57,7 +57,7 @@ def select_features(feature_names, X, y):
 
 def optimize_model(X, y):
     model = KNeighborsClassifier()
-    param_grid = {"n_neighbors": np.arange(1, 20), "metric": ["euclidean", "manhattan"]}
+    param_grid = {"n_neighbors": np.arange(1, 10), "metric": ["euclidean", "manhattan"]}
     
     grid = GridSearchCV(model, param_grid, cv=4)
     grid.fit(X, y)
@@ -88,6 +88,11 @@ selected_features = select_features(feature_names, X_encoded, y_encoded)
 
 X_selected = X[selected_features]
 
+"""
+for col in X_selected.select_dtypes("object"):
+    print(f"{col:-<50} {mushrooms[col].unique()}")
+"""
+
 X_ohe_encoder = OneHotEncoder()
 
 X_ohe_encoder.fit(X_selected)
@@ -98,7 +103,7 @@ X_train, X_test, y_train, y_test = train_test_split(X_selected_encoded, y_encode
 best_model = optimize_model(X_train, y_train.ravel())
 best_model.fit(X_train, y_train.ravel())
 
-# print(best_model.score(X_test, y_test))
+print(best_model.score(X_test, y_test))
 
 # evaluate(best_model, X_train, y_train.ravel(), X_test, y_test)
 
